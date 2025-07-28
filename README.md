@@ -1,97 +1,111 @@
 # ![SENDQSARKidney Logo](https://img.icons8.com/fluency/48/database.png) SENDQSARKidney
 
-## SENDQSAR: An R Package for QSAR Modeling with SEND Database
+## An R Package for QSAR Modeling with SEND Database
 
 ---
 
 ![QSAR Modeling](https://img.icons8.com/fluency/96/000000/artificial-intelligence.png)
 
-### About
+### Overview
 
-- **SENDQSARKidney** is an R package to facilitate **Quantitative Structure-Activity Relationship (QSAR)** modeling using data from the Standard for Exchange of Nonclinical Data (**SEND**) database.
-- It streamlines:
-  - Data acquisition
-  - Pre-processing
-  - Organ-wise toxicity score calculation
-  - Descriptor calculation
-  - Machine learning-based model evaluation
-- All functions are described in detail in the **“Articles”** section on the package’s GitHub website.
+**SENDQSARKidney** is an R package designed to accelerate **Quantitative Structure-Activity Relationship (QSAR)** modeling using data from the Standard for Exchange of Nonclinical Data (**SEND**) database.  
+It streamlines:
+
+- Data acquisition
+- Pre-processing
+- Organ-specific toxicity score calculation
+- Molecular descriptor calculation
+- Machine learning model development and evaluation
+
+Comprehensive function documentation is available in the **Articles** section on the package’s GitHub site.
 
 ---
 
 ## Features
 
-- 🚀 **Automated Data Processing:** Simple and efficient pre-processing workflows.
-- 📊 **Comprehensive Analysis:** Z-score calculations for:
+- 🚀 **Automated Data Processing**: Fast, efficient workflows for pre-processing SEND data
+- 📊 **Comprehensive Analysis**: Calculate z-scores for:
   - Body weight
-  - Liver-to-body weight ratio
-  - Laboratory tests
-- 🤖 **Machine Learning Integration:** 
-  - Supports classification models, hyperparameter tuning, and performance evaluation.
-- 📈 **Visualization Tools:**
-  - Histograms, bar plots, AUC curves, and more for insightful data interpretation.
+  - Kidney-to-body weight ratio
+  - Laboratory test results
+- 🤖 **Machine Learning Integration**: 
+  - Classification model training
+  - Hyperparameter tuning
+  - Model performance assessment
+- 📈 **Visualization Tools**:
+  - Histograms, bar plots, AUC curves, and more for insightful data exploration
 
 ---
 
 ## Workflow
 
-1. **Input Database Path:**  
-   Provide the path to the database or `.xpt` files with nonclinical study data in SEND format.  
+1. **Input Database Path**  
+   Supply the path to your database or `.xpt` files containing nonclinical SEND-formatted study data.  
    ![Database Icon](https://img.icons8.com/color/48/database.png)
-2. **Data Pre-processing:**  
+2. **Data Pre-processing**  
    Use modular functions (`f1` to `f8`) to clean, harmonize, and prepare your data for machine learning applications.  
    ![Processing Icon](https://img.icons8.com/office/40/process.png)
 
 ---
 
-## Modular Functions Overview
+## Modular Functions
 
-#### Liver Toxicity Score Calculation for Individual STUDYID
+### 1. Data Extraction & Score Calculation
 
 - **f1: `get_compile_data`**  
-  - Fetches structured data from the specified database path.
+  Extracts structured data from the specified database path.
 - **f2: `get_bw_score`**  
-  - Calculates body weight z-scores for each animal (uses `f1`).
+  Calculates body weight z-scores for each animal (calls `f1`).
 - **f3: `Kidneytobw_zscore`**  
-  - Computes liver-to-body weight z-scores (uses `f1`).
+  Computes kidney-to-body weight z-scores (calls `f1`).
 - **f4: `Kidney_lb_score`**  
-  - Calculates z-scores for laboratory test results (uses `f1`).
+  Calculates z-scores for laboratory test results (calls `f1`).
 - **f5: `Kidney_mi_score`**  
-  - Computes z-scores for microscopic findings (uses `f1`).
+  Computes z-scores for microscopic findings (calls `f1`).
 
-#### Liver Toxicity Score Calculation and Aggregation for Multiple STUDYID
+### 2. Aggregation & Machine Learning Preparation
 
-- **f6: `process_kidney_score`**
-  - Aggregates z-scores for LB, MI, and liver-to-BW ratio into a single data frame.
-  - Internally calls `f1`–`f5`.
+- **f6: `process_kidney_score`**  
+  Aggregates LB, MI, and kidney-to-BW ratio z-scores into a unified data frame (uses `f1`–`f5`).
+- **f7: `get_col_harmonized_scores_df`**  
+  Harmonizes and standardizes column names for downstream consistency (uses `f6`).
+- **f8: `get_ml_data_and_tuned_hyperparameters`**  
+  Prepares machine learning-ready data and tunes model hyperparameters (uses `f7`).
+
+### 3. Model Building & Evaluation
+
+- **f9: `get_rf_model_with_cv`**  
+  Builds a random forest model with cross-validation (uses `f8`).
+- **f10: `get_zone_exclusioned_rf_model_with_cv`**  
+  Enhances classification accuracy by excluding uncertain predictions (uses `f8`).
 
 ---
 
 ## Helper Functions
 
-- Modular helper functions to support each analysis step, ensuring code clarity and flexibility.
+Additional modular helpers support each analysis step, ensuring flexible, readable, and robust workflows.
 
 ---
 
-## Functions in Development
+## In Development
 
-- Additional modules are planned for:
-  - Organ-specific endpoints
-  - Expanded ML workflows
-  - Enhanced visualization and reporting
+- New modules for additional organ endpoints
+- Expanded ML workflows
+- Advanced visualization and reporting tools
 
 ---
 
 ## Dependencies
 
-- **R (≥ 4.1.0)**
-- **Key packages:** `dplyr`, `tidyr`, `data.table`, `ggplot2`, `caret`, `xgboost`, `readxl`, `DBI`, `ROCR`
-- See `DESCRIPTION` for a full list
+- **R** (≥ 4.1.0)
+- Key packages:  
+  `dplyr`, `tidyr`, `data.table`, `ggplot2`, `caret`, `xgboost`, `readxl`, `DBI`, `ROCR`  
+  *(See the DESCRIPTION file for the complete list.)*
 
 ---
 
 ## Installation
 
-```R
+```r
 # Install from GitHub
 remotes::install_github("yourusername/SENDQSARKidney")
